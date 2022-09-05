@@ -9,6 +9,7 @@ import {
   query,
   orderBy,
   serverTimestamp,
+  updateDoc,
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -28,19 +29,19 @@ const db = getFirestore();
 // reference the collection to read data from
 const booksReference = collection(db, "books");
 
-// query for a specific author
+// query
 const q = query(booksReference, orderBy("createdAt"));
 
-// add an event listener to changes in the collection
+// add an event listener to changes in the books collection
 onSnapshot(q, (snapshot) => {
   let books = [];
   snapshot.docs.forEach((book) => {
     books.push({ ...book.data(), id: book.id });
   });
-  console.log(books);
+  console.table(books);
 });
 
-// adding docs
+// adding books
 const addBookForm = document.querySelector(".add");
 addBookForm.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -68,4 +69,16 @@ const documentToGet = doc(db, "books", "67xWXWBYmnAEm1NOHeU4");
 
 onSnapshot(documentToGet, (doc) => {
   console.table({ ...doc.data(), id: doc.id });
+});
+
+// updating a book's title
+const updateBookForm = document.querySelector(".update");
+updateBookForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const documentToUpdate = doc(db, "books", updateBookForm.id.value);
+  updateDoc(documentToUpdate, {
+    title: "Updated title",
+  }).then(() => {
+    updateBookForm.reset();
+  });
 });
