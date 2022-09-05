@@ -61,9 +61,13 @@ const deleteBookForm = document.querySelector(".delete");
 deleteBookForm.addEventListener("submit", (event) => {
   event.preventDefault();
   const documentToDelete = doc(db, "books", deleteBookForm.id.value);
-  deleteDoc(documentToDelete).then(() => {
-    deleteBookForm.reset();
-  });
+  deleteDoc(documentToDelete)
+    .then(() => {
+      deleteBookForm.reset();
+    })
+    .catch((error) => {
+      console.log(error.message);
+    });
 });
 
 // fetching a single book with realtime updates
@@ -80,9 +84,13 @@ updateBookForm.addEventListener("submit", (event) => {
   const documentToUpdate = doc(db, "books", updateBookForm.id.value);
   updateDoc(documentToUpdate, {
     title: "Updated title",
-  }).then(() => {
-    updateBookForm.reset();
-  });
+  })
+    .then(() => {
+      updateBookForm.reset();
+    })
+    .catch((error) => {
+      console.log(error.message);
+    });
 });
 
 // signing users-up
@@ -91,8 +99,12 @@ signUpForm.addEventListener("submit", (event) => {
   event.preventDefault();
   const email = signUpForm.email.value;
   const password = signUpForm.password.value;
-  createUserWithEmailAndPassword(auth, email, password).then((cred) => {
-    console.log(cred.user);
-    signUpForm.reset();
-  });
+  createUserWithEmailAndPassword(auth, email, password)
+    .then((cred) => {
+      console.log(cred.user);
+      signUpForm.reset();
+    })
+    .catch((error) => {
+      console.log(error.message);
+    });
 });
