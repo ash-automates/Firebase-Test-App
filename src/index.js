@@ -11,7 +11,7 @@ import {
   serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: process.env.apiKey,
@@ -82,5 +82,16 @@ updateBookForm.addEventListener("submit", (event) => {
     title: "Updated title",
   }).then(() => {
     updateBookForm.reset();
+  });
+});
+
+// signing users-up
+const signUpForm = document.querySelector(".signup");
+signUpForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const email = signUpForm.email.value;
+  const password = signUpForm.password.value;
+  createUserWithEmailAndPassword(auth, email, password).then((cred) => {
+    console.log(cred.user);
   });
 });
