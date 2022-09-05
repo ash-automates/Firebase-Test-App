@@ -11,6 +11,7 @@ import {
   serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: process.env.apiKey,
@@ -25,6 +26,7 @@ initializeApp(firebaseConfig);
 
 // init the firebase services
 const db = getFirestore();
+const auth = getAuth();
 
 // reference the collection to read data from
 const booksReference = collection(db, "books");
