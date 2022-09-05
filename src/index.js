@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import {
   getFirestore,
   collection,
-  getDocs,
+  onSnapshot,
   addDoc,
   deleteDoc,
   doc,
@@ -25,10 +25,12 @@ const db = getFirestore();
 // reference the collection to read data from
 const collectionReference = collection(db, "books");
 
-// read the data from the collection
-getDocs(collectionReference).then((snapshot) => {
+// add an event listener to changes in the collection
+onSnapshot(collectionReference, (snapshot) => {
   let books = [];
-  snapshot.docs.forEach((doc) => books.push({ ...doc.data(), id: doc.id }));
+  snapshot.docs.forEach((book) => {
+    books.push({ ...book.data(), id: book.id });
+  });
   console.log(books);
 });
 
