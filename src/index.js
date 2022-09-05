@@ -62,3 +62,10 @@ deleteBookForm.addEventListener("submit", (event) => {
     deleteBookForm.reset();
   });
 });
+
+// fetching a single book with realtime updates
+const documentToGet = doc(db, "books", "67xWXWBYmnAEm1NOHeU4");
+
+onSnapshot(documentToGet, (doc) => {
+  console.table({ ...doc.data(), id: doc.id });
+});
