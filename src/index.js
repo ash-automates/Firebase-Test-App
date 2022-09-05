@@ -6,6 +6,8 @@ import {
   addDoc,
   deleteDoc,
   doc,
+  query,
+  where,
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -23,22 +25,25 @@ initializeApp(firebaseConfig);
 const db = getFirestore();
 
 // reference the collection to read data from
-const collectionReference = collection(db, "books");
+const booksReference = collection(db, "books");
+
+// query for a specific author
+const q = query(booksReference, where("author", "==", "Robert Cialdini"));
 
 // add an event listener to changes in the collection
-onSnapshot(collectionReference, (snapshot) => {
+onSnapshot(q, (snapshot) => {
   let books = [];
   snapshot.docs.forEach((book) => {
     books.push({ ...book.data(), id: book.id });
   });
-  console.log(books);
+  console.table(books);
 });
 
 // adding docs
 const addBookForm = document.querySelector(".add");
 addBookForm.addEventListener("submit", (event) => {
   event.preventDefault();
-  addDoc(collectionReference, {
+  addDoc(booksReference, {
     title: addBookForm.title.value,
     author: addBookForm.author.value,
   }).then(() => {
