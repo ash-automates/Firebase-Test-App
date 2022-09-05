@@ -93,5 +93,6 @@ signUpForm.addEventListener("submit", (event) => {
   const password = signUpForm.password.value;
   createUserWithEmailAndPassword(auth, email, password).then((cred) => {
     console.log(cred.user);
+    signUpForm.reset();
   });
 });
