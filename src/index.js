@@ -7,7 +7,8 @@ import {
   deleteDoc,
   doc,
   query,
-  where,
+  orderBy,
+  serverTimestamp,
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -28,7 +29,7 @@ const db = getFirestore();
 const booksReference = collection(db, "books");
 
 // query for a specific author
-const q = query(booksReference, where("author", "==", "Robert Cialdini"));
+const q = query(booksReference, orderBy("createdAt"));
 
 // add an event listener to changes in the collection
 onSnapshot(q, (snapshot) => {
@@ -36,7 +37,7 @@ onSnapshot(q, (snapshot) => {
   snapshot.docs.forEach((book) => {
     books.push({ ...book.data(), id: book.id });
   });
-  console.table(books);
+  console.log(books);
 });
 
 // adding docs
@@ -46,6 +47,7 @@ addBookForm.addEventListener("submit", (event) => {
   addDoc(booksReference, {
     title: addBookForm.title.value,
     author: addBookForm.author.value,
+    createdAt: serverTimestamp(),
   }).then(() => {
     addBookForm.reset();
   });
