@@ -41,7 +41,7 @@ const booksReference = collection(db, "books");
 const q = query(booksReference, orderBy("createdAt"));
 
 // add an event listener to changes in the books collection
-onSnapshot(q, (snapshot) => {
+const unSubToDB = onSnapshot(q, (snapshot) => {
   let books = [];
   snapshot.docs.forEach((book) => {
     books.push({ ...book.data(), id: book.id });
@@ -79,7 +79,7 @@ deleteBookForm.addEventListener("submit", (event) => {
 // fetching a single book with realtime updates
 const documentToGet = doc(db, "books", "67xWXWBYmnAEm1NOHeU4");
 
-onSnapshot(documentToGet, (doc) => {
+const unSubToDoc = onSnapshot(documentToGet, (doc) => {
   console.table({ ...doc.data(), id: doc.id });
 });
 
@@ -143,6 +143,16 @@ loginForm.addEventListener("submit", (event) => {
 });
 
 // subscribe to auth changes
-onAuthStateChanged(auth, (user) => {
+const unSubToAuth = onAuthStateChanged(auth, (user) => {
   console.log("user status changed: " + user);
+});
+
+// unsubscribing to database/auth status changes
+const unsubscribeButton = document.querySelector(".unsubscribe");
+unsubscribeButton.addEventListener("click", (event) => {
+  event.preventDefault();
+  unSubToDB();
+  unSubToDoc();
+  unSubToAuth();
+  console.log("Unsubscribed");
 });
