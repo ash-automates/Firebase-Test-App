@@ -16,6 +16,7 @@ import {
   createUserWithEmailAndPassword,
   signOut,
   signInWithEmailAndPassword,
+  onAuthStateChanged,
 } from "firebase/auth";
 
 const firebaseConfig = {
@@ -139,4 +140,9 @@ loginForm.addEventListener("submit", (event) => {
     .catch((error) => {
       console.log(error.message);
     });
+});
+
+// subscribe to auth changes
+onAuthStateChanged(auth, (user) => {
+  console.log("user status changed: " + user);
 });
